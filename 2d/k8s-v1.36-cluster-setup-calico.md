@@ -271,12 +271,16 @@ spec:
       targetPort: 80
       nodePort: 30080
 EOF
-
+```
+```bash
 # 파드가 여러 노드에 분산 배치되는지 확인
 kubectl get pods -o wide
 
+# 서비스 확인 : NodePort 
+kubectl get svc
+
 # 접속 테스트 (임의 노드 IP로)
-curl http://10.0.0.21:30080
+curl http://10.10.10.21:30080
 
 # 정리
 kubectl delete deployment nginx-test
@@ -284,6 +288,45 @@ kubectl delete service nginx-test
 ```
 
 세 개의 파드가 서로 다른 노드에 뜨고 NodePort로 응답하면 클러스터 네트워킹이 정상입니다.
+
+```bash
+# 테스트 매니페스트 삭제
+cat <<EOF | kubectl delete -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-test
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-test
+  template:
+    metadata:
+      labels:
+        app: nginx-test
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-test
+spec:
+  type: NodePort
+  selector:
+    app: nginx-test
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+EOF
+```
+모든 파드와 서비스가 삭제 되면 정상 입니다. 
 
 ---
 
@@ -299,6 +342,91 @@ kubectl delete service nginx-test
 
 ---
 
+# 기초 명령어 실습 
+참고 : https://kubernetes.io/ko/docs/reference/kubectl/cheatsheet/
+
+```bash
+# 모든 리소스 정보 확인 
+kubectl api-resources
+
+# 기본 출력을 위한 Get 커맨드
+
+kubectl get namespaces
+kubectl get pods                              # 기본(default)네임스페이스 내 모든 파드의 목록 조회
+kubectl get pod -n kube-system                # 특정 네임 스페이스의 파드 조회
+kubectl get pods --all-namespaces             # 모든 네임스페이스 내 모든 파드의 목록 조회
+kubectl get pods -A                           # 모든 네임스페이스 내 모든 파드의 목록 조회
+kubectl get pods -o wide                      # 해당하는 네임스페이스 내 모든 파드의 상세 
+kubectl get services                          # 네임스페이스 내 모든 서비스의 목록 조회
+kubectl get svc                               # 네임스페이스 내 모든 서비스의 목록 조회
+kubectl get deployment my-dep                 # 특정 디플로이먼트의 목록 조회                              
+kubectl get pod my-pod -o yaml                # 파드의 YAML 조회
+
+
+# 상세 출력을 위한 Describe 커맨드
+kubectl describe nodes my-node
+kubectl describe pods my-pod
+
+
+```
+
+
+
+
+# 명령어 자동 완성 및 알리어스 설정 
+
+## STEP 1 : bash-completion 설치
+
+
+```bash
+sudo dnf install -y bash-completion         # 또는: sudo yum install -y bash-completion 
+```
+
+
+### **bash 사용 시 [Linux] (~/.bashrc)**
+```bash
+cat >> ~/.bashrc << 'EOF'
+
+# bash-completion 로드
+[ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
+# kubectl 자동완성 (bash-completion 로드 이후에 와야 함)
+source <(kubectl completion bash)
+alias k=kubectl
+complete -o default -F __start_kubectl k
+EOF
+```
+
+## STEP 2 : 설정내용 활성화 
+적용 후:
+```bash
+source ~/.bashrc   
+```
+
+**자주 쓰는 alias 추가 (리눅스 : ~/.bashrc 또는 맥 : ~/.zshrc) : 주의 : 모든 명령어 완전숙지 후 사용 권장**
+```bash
+alias k=kubectl
+alias kgp='kubectl get pods'
+alias kgpa='kubectl get pods -A'
+alias kgs='kubectl get svc'
+alias kgd='kubectl get deployment'
+alias kgn='kubectl get nodes'
+alias kdp='kubectl describe pod'
+alias kl='kubectl logs'
+alias klf='kubectl logs -f'
+alias kaf='kubectl apply -f'
+alias kdel='kubectl delete'
+alias kex='kubectl exec -it'
+alias kctx='kubectl config current-context'
+alias kns='kubectl config set-context --current --namespace'
+```
+
+
+
+
+
+
+
 ## 부록 A. 컨트롤 플레인에 워크로드 배치 (단일 노드 실습용)
 
 기본적으로 컨트롤 플레인에는 일반 파드가 스케줄되지 않습니다. 단일 노드로 실습한다면 taint를 제거합니다. (멀티 노드 운영 환경에서는 권장하지 않음)
@@ -306,6 +434,7 @@ kubectl delete service nginx-test
 ```bash
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ```
+
 
 ## 부록 B. 노드 제거 / 초기화
 

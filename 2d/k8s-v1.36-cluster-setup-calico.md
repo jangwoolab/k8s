@@ -422,6 +422,46 @@ alias kns='kubectl config set-context --current --namespace'
 ```
 
 
+# 노드 리소스 모니터링
+
+**목표**: 노드별 CPU·메모리 실제 사용량을 확인한다. (metrics-server 필요)
+
+```bash
+# 전체 노드 사용량
+kubectl top node
+
+# 특정 노드
+kubectl top node k8s-worker01
+```
+
+예상 결과:
+
+```
+NAME           CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+k8s-worker01   145m         7%     1024Mi          27%
+```
+
+> `error: Metrics API not available` 가 나오면 metrics-server가 미설치 상태입니다. 
+
+##  metrics-server 설치: 
+```bash
+`kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+```
+
+### 자체 서명 인증서인 경우 아래 명령어 실행
+```bash
+kubectl patch deployment metrics-server -n kube-system --type='json' \
+    -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+```
+
+
+
+
+> (kubeadm 자체 서명 환경에서는 deployment에 `--kubelet-insecure-tls` 인자 추가가 필요할 수 있음)
+
+
+✅ **체크**: `top node`로 사용량을, `describe node`로 요청(request) 기반 할당량을 구분해 설명할 수 있다.
+
 
 
 

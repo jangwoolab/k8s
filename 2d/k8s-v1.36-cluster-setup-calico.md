@@ -445,7 +445,7 @@ k8s-worker01   145m         7%     1024Mi          27%
 
 ##  metrics-server 설치: 
 ```bash
-`kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml`
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 ```
 
 ### 자체 서명 인증서인 경우 아래 명령어 실행

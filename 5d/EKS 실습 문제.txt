@@ -1,0 +1,46 @@
+<실습문제 : EKS  > 
+각 스텝별 사용한 명령어와 캡쳐 이이지를 넣어서 자신의 notion 에 정리해서 pdf 로 제출 하시오.
+파일명 : 1조_홍길동.pdf
+제출 : p.jangwoo@gmail.com
+
+
+1. Local K8S 에서 Ingress-nginx 설치 해보기 
+2. petclinic 도커 이미지 생성  : petclinic:v1.0                   <== Project 에서 사용할 도커이미지 
+	<Windows Docker Desktop에서 작업 > 
+
+    - dockerHub 에 push
+    - AWS ECR 에 push  <== Private Registry 
+
+
+3. Bastion Host 구성 하기 
+   - 기본 VPC 에 생성 
+   - VM : Amazon Linux 2023 
+   - t3.micro
+   - 기본 VPC 에 생성 , Public IP 할당 
+   - 설치후 원격 접속 : 방화벽에서 접속 한 공인 IP 만 접근 
+
+   - kubectl 설치 
+   - aws cli 설치 
+   - eksctl 설치 
+   
+
+4. EKS 구성 하기 : eksctl 명령어를 사용하여 
+   - 클러스터 이름 : demo-eks
+   - 리전 : ap-northeast-2              <== 서울 리젼
+   - 노드그룹 : demo-ng
+	- 인스턴스 타입 : t3.medium                  <== RAM 4G
+	- 노드 볼륨 크기 : 20GB 
+   
+
+5. EKS 에서 Deployment 를 사용히서 petclinic:v1.0 파드 3개 배포 하기 : petclinic-app
+
+6. petclinic-app을 LoadBalancer 부착해서 DNS이름 으로 접속 해보기 
+
+7. ingress-nginx 설치
+
+8. Deployment 삭제 / Service 삭제 
+
+9. AWS 리소스 삭제 
+
+
+

@@ -42,8 +42,6 @@
 
 7. ALB를 사용 하여 https://www.sample.com 으로 접속 확인 하시오 
 
-
-
 9. AWS 리소스 삭제 
 
 

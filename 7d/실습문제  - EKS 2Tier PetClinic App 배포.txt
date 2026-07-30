@@ -1,0 +1,55 @@
+<실습문제  : EKS, ECR를 사용한 2Tier App 배포 실습  > 
+각 스텝별 사용한 명령어와 캡쳐 이이지를 넣어서 자신의 notion 에 정리해서 pdf 로 제출 하시오.
+
+파일명 : 1조_홍길동.pdf, 인프라구성도.png
+제출 : p.jangwoo@gmail.com
+
+목표 : 
+	- EKS를 배포하여 PetClinic APP을 2Tier App으로 배포 실습한다. ( Web(3), WAS(1) ) 
+	- Web 서버는 Nginx 를 사용한다. 
+		- Nginx 웹서버 설정파일에서 Proxy 설정을 하여 Client 요청 패킷을 WAS로 전송한다. 
+	- https 통신을 구축한다. ( ALB, Route53, ACM) 
+
+EKS 사용 service
+	- EKS, ECR, ALB, Route53, ACM, IAM, EC2, VPC
+	
+
+1. Bestion Host 작동 : 6일차에 자동화한 Bestion Host를 작동 시킨다. 
+2. ECR 에 
+	- PetClinic 도커 이미지(v2.0)를 배포한다. 	<== Multi Stage Build된 이미지 
+	- Nginx 이미지 		<== Proxy 설정된 Nginx Docker 이미지 
+		======================nginx.conf==============================
+server {
+    listen 80;
+    location / {
+        proxy_pass http://was-service:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+}
+		====================================================
+
+3. EKS 배포 
+	- t3.medium			<== RAM: 4GB
+	- ap-northeast-2 		<== 서울리젼 ( ap-northeast-2a,ap-northeast-2c)  
+	- VPC (10.10.0.0/16) 	<== Custom VPC
+	- Private Subnet		<==  EKS Cluster 배포
+	
+
+4. EKS Cluster에서 Web 서버를 Deployment를 사용해서 3개의 POD로 배포 한다. 
+
+  Nginx 웹서버 배포 : TCP 80
+	- Deployment 이름 : web-nginx 
+		- 배포 갯수 3개 POD
+	- web-nginx Deployment 에 Service 부착 - LoadBalancer
+
+  WAS : PetClinic 앱 배포 : TCP 8080
+	- Deployment 이름 : was-service
+		- 배포 갯수 1개 POD
+	- was-service Deployment 에 Service 부착 - ClusterIP
+
+5. ALB를 사용 하여 https://www.sample.com [자신의 도메인] 으로 접속 확인 하시오.  <== 캡쳐
+
+6. AWS 모든 리소스 삭제 
+

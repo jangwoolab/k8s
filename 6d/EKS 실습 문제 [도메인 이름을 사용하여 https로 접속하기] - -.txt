@@ -47,4 +47,13 @@
 9. AWS 리소스 삭제 
 
 
+빨리 완료 해서 시간이 남으시는 분들은 아래 내용도 구축해 보세요. 
+
+- aws 명령어를 사용한 인스턴스 자동 생성 
+- CloudeForMation을 사용한 인스턴스 자동 생성 
+
+- EKS VPC ( 10.10.0.0/16 ), Private Zone에 클러스터 생성
+- Deployment를 사용해서 pod 3개 배포.  
+- 로드 밸런서 매핑 : 긴이름. 
+- https://www.example.com으로 접속시 petclinic 서비스 잘 노출 
 

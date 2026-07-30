@@ -1,0 +1,50 @@
+<실습문제  : ALB, Route53, ACM, 을 사용한 https 통신 연결  > 
+각 스텝별 사용한 명령어와 캡쳐 이이지를 넣어서 자신의 notion 에 정리해서 pdf 로 제출 하시오.
+
+파일명 : 1조_홍길동.pdf, bastion_host_auto_script.txt
+제출 : p.jangwoo@gmail.com
+
+1. 도메인 구매 [ 2,200원 [ 1년] ] ,  *.shop, *.store    
+	https://domain.gabia.com/regist/today_domain	<== 신청할 도메인 별 가격 확인 
+	https://domain.gabia.com/	<== 신청할 도메인 검색 및 신청 
+
+2. petclinic 도커 이미지 생성  : petclinic:v2.0                   <== Project 에서 사용할 도커이미지 
+	<Windows Docker Desktop에서 작업 > 
+    - Multi Stage Build를 사용하여 이미지를 축소 하시오. 500MB => 100MB
+    - Docker Hub push
+    - AWS ECR 에 push  <== Private Registry 
+
+
+3. Bastion Host 구성 하기  [VM 생성시 자동으로 프로그램 설치 되도록 구성] 
+   - 기본 VPC 에 생성 
+   - VM : Amazon Linux 2023 
+   - t3.medium                               <== RAM 4GB
+   - 기본 VPC 에 생성 , Public IP 할당 
+   - 설치후 원격 접속 : 방화벽에서 자신이 접속 한 공인 IP 만 접근,  원격관리 [ssh:22]
+
+[아래 설치 명령은 VM 생성시 자동으로 설치 되도록 합니다. ]  <== 설치 스크립트 노션에 정리 
+   - kubectl 설치 
+   - aws cli 설치 	, aws configure 를 사용하여 Access Key, Token 등록, 리젼: ap-northeast-2  
+   - eksctl 설치
+   - docker 설치  -- 특정 프로그램 설치 완료후 다음 명령어 적용 : && 연산자 사용 
+ 	- 현재 계정이 docker 명령어 사용하도록 권한 할당.  docker ps, docker images로 확인 
+
+4.  http://<공인IP> 로 접속시 petclinic 사이트 열기 
+    - docker run 명령어 사용해서 ECR의 도커 이미지를 다운받아 컨테이너 작동 
+	- 컨테이너 명: petclinic-app
+	- 포트 매핑 : 80:8080
+    - 접속 확인 : http://<공인IP>                      <== 화면 캡쳐 
+
+5. Route 53 에 신청한 도메인의 zone 생성, A레코드 생성 
+    - http://www.sample.shop 접속시 petclinic 사이트 접속 확인 : 
+
+6. ACM을 사용 하여 신청한 도메인의 인증서를 매핑 하시오 
+
+7. ALB를 사용 하여 https://www.sample.com 으로 접속 확인 하시오 
+
+
+
+9. AWS 리소스 삭제 
+
+
+

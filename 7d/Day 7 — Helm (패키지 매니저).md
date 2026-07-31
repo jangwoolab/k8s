@@ -93,16 +93,31 @@ Repository (예: bitnami)
 
 ## 3. Helm 설치
 
-### 5일차 설치 참조 
+### [참조] 5일차 설치 했음
+
+
+### Helm 설치를 위한 준비 
 ```bash
-# 스크립트 설치 (Linux/macOS)
+sudo dnf install -y tar git openssl
+```
+
+### Helm 설치
+```bash
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
 chmod 700 get_helm.sh
+
 ./get_helm.sh
 
-# 설치 확인
+```
+
+### Helm 설치 확인 
+```bash
+helm
+
 helm version
 ```
+
 
 | 환경 | 설치 방법 |
 |---|---|

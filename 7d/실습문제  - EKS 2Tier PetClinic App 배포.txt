@@ -45,14 +45,13 @@ server {
   Nginx 웹서버 배포 : TCP 80
 	- Deployment 이름 : web-nginx 
 		- 배포 갯수 3개 POD
-	- web-nginx Deployment 에 Service 부착 - LoadBalancer
 
   WAS : PetClinic 앱 배포 : TCP 8080
 	- Deployment 이름 : was-service
 		- 배포 갯수 1개 POD
 	- was-service Deployment 에 Service 부착 - ClusterIP
 
-5. ALB를 사용 하여 https://www.sample.com [자신의 도메인] 으로 접속 확인 하시오.  <== 캡쳐
+5. AWS ALB를 사용 하여 https://www.sample.com [자신의 도메인] 으로 접속 확인 하시오.  <== 캡쳐
 
 6. AWS 모든 리소스 삭제 
 

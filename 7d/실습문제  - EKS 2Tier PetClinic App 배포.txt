@@ -3,7 +3,7 @@
 
 파일명 : 1조_홍길동.zip
 	- 1조_홍길동.pdf, 
-	- 인프라구성도.png
+	- 인프라구성도.png		<== draw.io ,  배포된 AWS-Architecture-Icon...ppt 참조 
 	- nginx.conf
 제출 : p.jangwoo@gmail.com
 

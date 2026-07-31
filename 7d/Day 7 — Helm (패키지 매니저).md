@@ -93,6 +93,7 @@ Repository (예: bitnami)
 
 ## 3. Helm 설치
 
+### 5일차 설치 참조 
 ```bash
 # 스크립트 설치 (Linux/macOS)
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3

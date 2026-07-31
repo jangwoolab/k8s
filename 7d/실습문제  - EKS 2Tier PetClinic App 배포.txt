@@ -1,7 +1,10 @@
 <실습문제  : EKS, ECR를 사용한 2Tier App 배포 실습  > 
 각 스텝별 사용한 명령어와 캡쳐 이이지를 넣어서 자신의 notion 에 정리해서 pdf 로 제출 하시오.
 
-파일명 : 1조_홍길동.pdf, 인프라구성도.png
+파일명 : 1조_홍길동.zip
+	- 1조_홍길동.pdf, 
+	- 인프라구성도.png
+	- nginx.conf
 제출 : p.jangwoo@gmail.com
 
 목표 : 
@@ -18,7 +21,7 @@ EKS 사용 service
 2. ECR 에 
 	- PetClinic 도커 이미지(v2.0)를 배포한다. 	<== Multi Stage Build된 이미지 
 	- Nginx 이미지 		<== Proxy 설정된 Nginx Docker 이미지 
-		======================nginx.conf==============================
+		======================nginx.conf : 참조 ==============================
 server {
     listen 80;
     location / {
